@@ -1,9 +1,10 @@
 from pathlib import Path
 from PIL import Image
+from pypdf import PdfWriter
 
-# path=Path.home() /  "Testing_Project"            
-path=input("Enter the folder path: ")
-path = Path(path.strip().replace("'","")).expanduser()
+path=Path.home() /  "Testing_Project"            
+# path=input("Enter the folder path: ")
+# path = Path(path.strip().replace("'","")).expanduser()
 
 
 
@@ -40,16 +41,36 @@ def image_to_PDF(path):
 
 def PDFs_Merger(path):
 
-
+    print("Merging PDFs ...................")
+    Target_directory= path / "Merged_PDFs"
+    Target_directory.mkdir(exist_ok=True)
 
     convert=[]
 
     for item in path.iterdir():
         if item.is_file():
             if item.suffix.lower() == ".pdf":
-                convert.append(item.name)
+                convert.append(item)
 
-    print(convert)
+    if convert:
+        convert=sorted(convert)
+        merger= PdfWriter()
+
+        Output_path= Target_directory / "Merged_files.pdf"
+        i=1
+        while Output_path.exists():
+            Output_path= Target_directory / f"Merged_files_{i}.pdf"
+            i+=1
+
+        for item in convert:
+            merger.append(item)
+
+        merger.write(Output_path)
+        merger.close()
+        print(f"PDFs Merged -> Saved to: {Target_directory.name} Folder....")
+                
+    else:
+        print("No valid PDFs found for conversion")
 
 
 
@@ -57,6 +78,6 @@ def PDFs_Merger(path):
 
 
 if path.exists():
-    image_to_PDF(path)
+    PDFs_Merger(path)
 else:
     print(f"Path does not exits!: {path}")
