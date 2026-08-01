@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from pathlib import Path
 import shutil
 from PIL import Image
@@ -224,8 +225,8 @@ print("4. Compress a PDF")
 choice = input("Enter choice (1-4): ").strip()
 
 if choice in ("1", "2", "3"):
-    path = input("Enter the folder path: ")
-    path = Path(path.strip().replace("'", "")).expanduser()
+    path = input("Enter the folder path (press Enter to use current folder): ").strip()
+    path = Path(path.replace("'", "")).expanduser() if path else Path.cwd()
 
     if not path.exists():
         print(f"Path does not exits!: {path}")
