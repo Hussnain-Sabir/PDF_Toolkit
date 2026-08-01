@@ -1,4 +1,3 @@
-#!/usr/bin/env python3       # this is for linux and mac only to access the script from terminal directly | reomove if want to run in code editor
 from pathlib import Path
 import shutil
 from PIL import Image
