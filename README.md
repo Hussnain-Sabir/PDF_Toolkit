@@ -2,6 +2,8 @@
 
 A lightweight, terminal-based CLI application built with Python to convert, merge, and compress PDFs and images seamlessly.
 
+Wrote all of the code on my own, but used AI help for image compression in PDFs and for CLI input.
+
 ---
 
 ## 🌟 Features
