@@ -244,7 +244,7 @@ elif choice == "4":
         print(f"Path is not a valid PDF file!: {path}")
     else:
         target = input("Enter target size in MB (default 4): ").strip()
-        target_mb = float(target) if target else 2
+        target_mb = float(target) if target else 4
         PDF_Compressor(path, target_mb)
 
 else:
