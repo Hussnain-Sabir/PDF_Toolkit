@@ -1,4 +1,4 @@
-#!/usr/bin/env python3         # this is for linux and mac only to access the script from terminal directly
+#!/usr/bin/env python3       # this is for linux and mac only to access the script from terminal directly | reomove if want to run in code editor
 from pathlib import Path
 import shutil
 from PIL import Image
@@ -207,7 +207,13 @@ def PDF_Compressor(path, target_mb=4):
             if best_size <= target_bytes:
                 break
 
-        print(f"Tried {target_mb}MB, Final achieved = {best_size / (1024 * 1024):.2f} MB -> Saved to: {Output_path.name}")
+        if best_size < 1024 * 1024:
+            size_str = f"{best_size / 1024:.2f} KB"
+        else:
+            size_str = f"{best_size / (1024 * 1024):.2f} MB"
+
+        print(f"Trying Compressing under {target_mb}MB, and achieved = {size_str} -> Saved to: {Output_path.name}")
+        
     else:
         print("Path is not a valid PDF file!")
 
@@ -241,21 +247,27 @@ if choice in ("1", "2", "3"):
             IMG_merge_PDF(path)
 
 elif choice == "4":
-    path = input("Enter the PDF file path: ")
-    path = Path(path.strip().replace("'", "")).expanduser()
+    folder = input("Enter the folder path (press Enter to use current folder): ").strip()
+    folder = Path(folder.replace("'", "")).expanduser() if folder else Path.cwd()
 
-    if not path.exists():
-        print(f"Path does not exits!: {path}")
-    elif not path.is_file() or path.suffix.lower() != ".pdf":
-        print(f"Path is not a valid PDF file!: {path}")
+    if not folder.exists() or not folder.is_dir():
+        print(f"Path does not exits!: {folder}")
     else:
-        target = input("Enter target size in MB (default 4): ").strip()
-        try:
-            target_mb = float(target) if target else 4
-        except ValueError:
-            print("Invalid number, using default 4MB")
-            target_mb = 4
-        PDF_Compressor(path, target_mb)
+        filename = input(f"Enter the PDF filename (inside {folder}): ").strip()
+        path = folder / filename
+
+        if not path.exists():
+            print(f"Path does not exits!: {path}")
+        elif not path.is_file() or path.suffix.lower() != ".pdf":
+            print(f"Path is not a valid PDF file!: {path}")
+        else:
+            target = input("Enter target size in MB (default 4): ").strip()
+            try:
+                target_mb = float(target) if target else 4
+            except ValueError:
+                print("Invalid number, using default 4MB")
+                target_mb = 4
+            PDF_Compressor(path, target_mb)
 
 else:
     print("Invalid choice!")
