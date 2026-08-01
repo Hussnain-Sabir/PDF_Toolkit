@@ -26,6 +26,7 @@ def Image_to_PDF(path):
                     img=img.convert("RGB")
                     convert.append(img)
 
+    print(f"Found {len(convert)} files")
 
     if convert:
         Output_path= Target_directory / "Merged_files.pdf"
@@ -59,6 +60,8 @@ def PDFs_Merger(path):
             if item.suffix.lower() == ".pdf":
                 convert.append(item)
 
+    print(f"Found {len(convert)} files")
+
     if convert:
         convert=sorted(convert)
         merger= PdfWriter()
@@ -75,7 +78,6 @@ def PDFs_Merger(path):
         merger.write(Output_path)
         merger.close()
         print(f"PDFs Merged -> Saved to: {Target_directory.name} Folder....")
-                
     else:
         print("No valid PDFs found for conversion!")
 
@@ -99,6 +101,9 @@ def IMG_merge_PDF(path):
         if item.is_file():
             if item.suffix.lower() in (valid_extensions + (".pdf",)):
                 convert.append(item)
+
+    
+    print(f"Found {len(convert)} files")
 
     if convert:
         convert= sorted(convert)
@@ -201,7 +206,7 @@ def PDF_Compressor(path, target_mb=4):
             if best_size <= target_bytes:
                 break
 
-        print(f"Tried {target_mb}MB but final achieved = {best_size / (1024 * 1024):.2f} MB -> Saved to: {Output_path.name}")
+        print(f"Tried {target_mb}MB, Final achieved = {best_size / (1024 * 1024):.2f} MB -> Saved to: {Output_path.name}")
     else:
         print("Path is not a valid PDF file!")
 
@@ -244,7 +249,11 @@ elif choice == "4":
         print(f"Path is not a valid PDF file!: {path}")
     else:
         target = input("Enter target size in MB (default 4): ").strip()
-        target_mb = float(target) if target else 4
+        try:
+            target_mb = float(target) if target else 4
+        except ValueError:
+            print("Invalid number, using default 4MB")
+            target_mb = 4
         PDF_Compressor(path, target_mb)
 
 else:
